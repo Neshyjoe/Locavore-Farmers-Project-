@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { useParams, Link, useNavigate } from "react-router-dom"
 import ReviewForm from "../components/ReviewForm"
 import ReviewList from "../components/ReviewList"
+// import api from "
+
 
 const VendorDetail = () => {
   const { id } = useParams()
