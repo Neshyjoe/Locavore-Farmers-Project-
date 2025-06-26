@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../App"
+import "../css/Register.css"
 
-const Register = () => {
+export default function Register() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,7 +14,6 @@ const Register = () => {
   })
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
-
   const { register } = useAuth()
   const navigate = useNavigate()
 
@@ -26,8 +26,14 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
     setError("")
+    setLoading(true)
+
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      setError("Please fill in all fields")
+      setLoading(false)
+      return
+    }
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match")
@@ -35,103 +41,113 @@ const Register = () => {
       return
     }
 
-    const result = await register(formData.email, formData.password, formData.name)
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long")
+      setLoading(false)
+      return
+    }
 
-    if (result.success) {
-      navigate("/login", {
-        state: { message: "Registration successful! Please login." },
-      })
-    } else {
-      setError(result.error)
+    try {
+      const result = register(formData.email, formData.password, formData.name)
+      if (result.success) {
+        navigate("/")
+      } else {
+        setError("Registration failed")
+      }
+    } catch (err) {
+      setError("Registration failed. Please try again.")
     }
 
     setLoading(false)
   }
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold text-center mb-6">Join Locavore</h2>
+    <div className="register-container">
+      <div className="register-header">
+        <h1 className="app-title">🥕 Locavore</h1>
+        <p className="app-subtitle">Discover Local Food Vendors & Farmers Markets</p>
+      </div>
 
-      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
+      <div className="register-form-container">
+        <h2 className="form-title">Register</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+        {error && <div className="error-message">{error}</div>}
+
+        <form onSubmit={handleSubmit} className="register-form">
+          <div className="form-group">
+            <label htmlFor="name" className="form-label">
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="form-input"
+              placeholder="Enter your full name"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="form-input"
+              placeholder="Enter your email"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="form-input"
+              placeholder="Enter your password"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="confirmPassword" className="form-label">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="form-input"
+              placeholder="Confirm your password"
+            />
+          </div>
+
+          <button type="submit" disabled={loading} className="submit-btn">
+            {loading ? "Creating Account..." : "Register"}
+          </button>
+        </form>
+
+        <div className="form-footer">
+          <p className="switch-form">
+            Already have an account?{" "}
+            <Link to="/login" className="form-link">
+              Login here
+            </Link>
+          </p>
         </div>
-
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-        </div>
-
-        <div className="mb-6">
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50"
-        >
-          {loading ? "Creating Account..." : "Register"}
-        </button>
-      </form>
-
-      <p className="text-center mt-4 text-sm text-gray-600">
-        Already have an account?{" "}
-        <Link to="/login" className="text-green-600 hover:text-green-700">
-          Login here
-        </Link>
-      </p>
+      </div>
     </div>
   )
 }
-
-export default Register
