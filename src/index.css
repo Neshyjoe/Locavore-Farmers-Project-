@@ -1,9 +1,0 @@
-/* Global styles with Tailwind setup */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
