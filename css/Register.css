@@ -1,0 +1,42 @@
+/* Styles for registration form */
+.form-container {
+    max-width: 448px;
+    margin: 40px auto;
+    padding: 24px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #15803d;
+    margin-bottom: 16px;
+  }
+  
+  .error {
+    color: #dc2626;
+    margin-bottom: 16px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+  }
+  
+  .button {
+    background-color: #16a34a;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #15803d;
+  }
