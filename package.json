@@ -1,23 +1,28 @@
 {
-    "name": "locavore-farmers-project",
-    "private": true,
-    "version": "1.0.0",
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build",
-        "preview": "vite"
-    },
-    "dependencies": {
-        "@vitejs/plugin-react": "^3",
-        "axios": "^1",
-        "react": "^18",
-        "react-dom": "^18",
-        "react-router-dom": "^6",
-        "vite": "^4"
-    },
-    "devDependencies": {
-        "autoprefixer": "^10.4.21",
-        "postcss": "^8.5.6",
-        "tailwindcss": "^4.1.10"
-    }
+  "name": "locavore-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
