@@ -18,5 +18,9 @@ def create_app():
     app.register_blueprint(vendor_bp)
     app.register_blueprint(review_bp)
 
+    @app.route('/')
+    def home():
+        return 'Welcome to Locavore Backend API!'
+
     return app
 
