@@ -16,7 +16,8 @@ function VendorList() {
         throw new Error('Failed to fetch vendors');
       }
       const data = await response.json();
-      setVendors(data);
+      console.log('VendorList fetched data:', data);
+      setVendors(data.vendors);
     } catch (err) {
       setError('Error loading vendors');
     }
