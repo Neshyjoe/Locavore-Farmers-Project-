@@ -10,3 +10,6 @@ class Vendor(db.Model):
 
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     reviews = db.relationship('Review', backref='vendor', cascade="all, delete")
+    
+    def __repr__(self):
+        return f'<Vendor {self.name}>'

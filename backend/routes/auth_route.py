@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
-from models.user import User
+from models import db, User
 from flask_jwt_extended import create_access_token
-from database import db
+from datetime import timedelta
 
-auth_bp = Blueprint('auth', __name__, url_prefix='/')
+auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
@@ -12,8 +12,11 @@ def register():
     email = data.get('email')
     password = data.get('password')
 
+    if not username or not email or not password:
+        return jsonify({'message': 'Missing required fields'}), 400
+
     if User.query.filter((User.username == username) | (User.email == email)).first():
-        return jsonify({'message': 'Username or email already exists'}), 400
+        return jsonify({'message': 'User with that username or email already exists'}), 409
 
     user = User(username=username, email=email)
     user.set_password(password)
@@ -28,9 +31,12 @@ def login():
     username = data.get('username')
     password = data.get('password')
 
+    if not username or not password:
+        return jsonify({'message': 'Missing username or password'}), 400
+
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
-        access_token = create_access_token(identity=user.id)
+        access_token = create_access_token(identity=user.id, expires_delta=timedelta(hours=1))
         return jsonify({'access_token': access_token}), 200
-
-    return jsonify({'message': 'Invalid credentials'}), 401
+    else:
+        return jsonify({'message': 'Invalid username or password'}), 401
