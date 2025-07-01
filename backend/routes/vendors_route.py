@@ -5,7 +5,7 @@ from models.vendor import Vendor
 
 vendors_bp = Blueprint('vendors', __name__, url_prefix='/vendors')
 
-@vendors_bp.route('/vendors', methods=['GET'])
+@vendors_bp.route('/', methods=['GET'])
 @jwt_required()
 def list_vendors():
     vendors = Vendor.query.all()
@@ -15,25 +15,28 @@ def list_vendors():
             'id': v.id,
             'name': v.name,
             'description': v.description,
-            'owner_id': v.user_id
+            'owner_id': v.owner_id
         })
     return jsonify(result), 200
 
-@vendors_bp.route('/vendors', methods=['POST'])
+@vendors_bp.route('/', methods=['POST'])
 @jwt_required()
 def add_vendor():
     data = request.get_json()
     name = data.get('name')
+    location = data.get('location')
     description = data.get('description')
     if not name:
         return jsonify({'message': 'Vendor name is required'}), 400
+    if not location:
+        return jsonify({'message': 'Vendor location is required'}), 400
     user_id = get_jwt_identity()
-    vendor = Vendor(name=name, description=description, user_id=user_id)
+    vendor = Vendor(name=name, location=location, description=description, owner_id=user_id)
     db.session.add(vendor)
     db.session.commit()
     return jsonify({'message': 'Vendor added', 'id': vendor.id}), 201
 
-@vendors_bp.route('/vendors/<int:vendor_id>', methods=['GET'])
+@vendors_bp.route('/<int:vendor_id>', methods=['GET'])
 @jwt_required()
 def vendor_detail(vendor_id):
     vendor = Vendor.query.get_or_404(vendor_id)
@@ -54,7 +57,7 @@ def vendor_detail(vendor_id):
         'reviews': reviews
     }), 200
 
-@vendors_bp.route('/vendors/<int:vendor_id>', methods=['PUT'])
+@vendors_bp.route('/<int:vendor_id>', methods=['PUT'])
 @jwt_required()
 def update_vendor(vendor_id):
     vendor = Vendor.query.get_or_404(vendor_id)
@@ -71,12 +74,12 @@ def update_vendor(vendor_id):
     db.session.commit()
     return jsonify({'message': 'Vendor updated'}), 200
 
-@vendors_bp.route('/vendors/<int:vendor_id>', methods=['DELETE'])
+@vendors_bp.route('/<int:vendor_id>', methods=['DELETE'])
 @jwt_required()
 def delete_vendor(vendor_id):
     vendor = Vendor.query.get_or_404(vendor_id)
     user_id = get_jwt_identity()
-    if vendor.user_id != user_id:
+    if vendor.owner_id != user_id:
         return jsonify({'message': 'Unauthorized'}), 403
     db.session.delete(vendor)
     db.session.commit()

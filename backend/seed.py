@@ -21,8 +21,8 @@ with app.app_context():
     db.session.add_all([vendor1, vendor2])
     db.session.commit()
 
-    review1 = Review(content='Amazing veggies!', rating=5, vendor_id=vendor1.id, user_id=user2.id)
-    review2 = Review(content='Loved the herbal tea.', rating=4, vendor_id=vendor2.id, user_id=user1.id)
+    review1 = Review(comment='Amazing veggies!', rating=5, vendor_id=vendor1.id, user_id=user2.id)
+    review2 = Review(comment='Loved the herbal tea.', rating=4, vendor_id=vendor2.id, user_id=user1.id)
 
     db.session.add_all([review1, review2])
     db.session.commit()
