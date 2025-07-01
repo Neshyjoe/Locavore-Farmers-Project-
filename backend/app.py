@@ -22,12 +22,12 @@ jwt = JWTManager(app)
 CORS(app)
 
 from routes.auth_route import auth_bp
-from routes.vendors_route import vendors_bp
-from routes.reviews_route import reviews_bp
+from routes.vendors_route import api_bp
+from routes.reviews_route import api_bp
 
 app.register_blueprint(auth_bp)
-app.register_blueprint(vendors_bp)
-app.register_blueprint(reviews_bp)
+app.register_blueprint(api_bp)
+app.register_blueprint(api_bp)
 
 if __name__ == '__main__':
     app.run(debug=True)
