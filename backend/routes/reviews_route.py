@@ -4,9 +4,9 @@ from database import db
 from models.review import Review
 from models.vendor import Vendor
 
-api_bp = Blueprint('reviews', __name__, url_prefix='/reviews')
+reviews_bp = Blueprint('reviews', __name__, url_prefix='/reviews')
 
-@api_bp.route('/reviews', methods=['POST'])
+@reviews_bp.route('/reviews', methods=['POST'])
 @jwt_required()
 def add_review():
     data = request.get_json()
@@ -24,7 +24,7 @@ def add_review():
     db.session.commit()
     return jsonify({'message': 'Review added', 'id': review.id}), 201
 
-@api_bp.route('/reviews/<int:review_id>', methods=['PUT'])
+@reviews_bp.route('/reviews/<int:review_id>', methods=['PUT'])
 @jwt_required()
 def update_review(review_id):
     review = Review.query.get_or_404(review_id)
@@ -41,7 +41,7 @@ def update_review(review_id):
     db.session.commit()
     return jsonify({'message': 'Review updated'}), 200
 
-@api_bp.route('/reviews/<int:review_id>', methods=['DELETE'])
+@reviews_bp.route('/reviews/<int:review_id>', methods=['DELETE'])
 @jwt_required()
 def delete_review(review_id):
     review = Review.query.get_or_404(review_id)

@@ -10,5 +10,4 @@ class Review(db.Model):
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendors.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
-    vendor = db.relationship('Vendor', backref='reviews')
-    user = db.relationship('User', backref='reviews')
+   

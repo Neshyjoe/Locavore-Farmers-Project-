@@ -7,9 +7,8 @@ class Vendor(db.Model):
     name = db.Column(db.String(100), nullable=False)
     location = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=True)
-
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    reviews = db.relationship('Review', backref='vendor', cascade="all, delete")
     
-    def __repr__(self):
-        return f'<Vendor {self.name}>'
+    reviews = db.relationship('Review', backref='vendor_review', lazy=True)
+    
+    

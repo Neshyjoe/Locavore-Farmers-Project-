@@ -3,9 +3,9 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from database import db
 from models.vendor import Vendor
 
-api_bp = Blueprint('vendors', __name__, url_prefix='/vendors')
+vendors_bp = Blueprint('vendors', __name__, url_prefix='/vendors')
 
-@api_bp.route('/vendors', methods=['GET'])
+@vendors_bp.route('/vendors', methods=['GET'])
 @jwt_required()
 def list_vendors():
     vendors = Vendor.query.all()
@@ -19,7 +19,7 @@ def list_vendors():
         })
     return jsonify(result), 200
 
-@api_bp.route('/vendors', methods=['POST'])
+@vendors_bp.route('/vendors', methods=['POST'])
 @jwt_required()
 def add_vendor():
     data = request.get_json()
@@ -33,7 +33,7 @@ def add_vendor():
     db.session.commit()
     return jsonify({'message': 'Vendor added', 'id': vendor.id}), 201
 
-@api_bp.route('/vendors/<int:vendor_id>', methods=['GET'])
+@vendors_bp.route('/vendors/<int:vendor_id>', methods=['GET'])
 @jwt_required()
 def vendor_detail(vendor_id):
     vendor = Vendor.query.get_or_404(vendor_id)
@@ -54,7 +54,7 @@ def vendor_detail(vendor_id):
         'reviews': reviews
     }), 200
 
-@api_bp.route('/vendors/<int:vendor_id>', methods=['PUT'])
+@vendors_bp.route('/vendors/<int:vendor_id>', methods=['PUT'])
 @jwt_required()
 def update_vendor(vendor_id):
     vendor = Vendor.query.get_or_404(vendor_id)
@@ -71,7 +71,7 @@ def update_vendor(vendor_id):
     db.session.commit()
     return jsonify({'message': 'Vendor updated'}), 200
 
-@api_bp.route('/vendors/<int:vendor_id>', methods=['DELETE'])
+@vendors_bp.route('/vendors/<int:vendor_id>', methods=['DELETE'])
 @jwt_required()
 def delete_vendor(vendor_id):
     vendor = Vendor.query.get_or_404(vendor_id)
